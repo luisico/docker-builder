@@ -6,6 +6,7 @@ usage() {
       echo "  -h, --help                Display this help message"
       echo "  -i, --image image         Docker image to build"
       echo "  -d, --dir dir             Directory for build context"
+      echo "  -f, --file file           Name of the Dockerfile (Default is 'PATH/Dockerfile')"
       echo "  -t, --tag tag             Tags for docker image (ie. latest; optional, repeat to add more tags)"
       echo "  -s, --semantic version    Generate docker tags for version based on semantic convention (ie 1.2.3)"
       echo "  -l, --label label         Labels to pass to docker build (ie label=value; optional, repeat to add more labels)"
@@ -14,6 +15,7 @@ usage() {
 # Default variables
 image=
 dir=
+file=Dockerfile
 declare -a tags
 semantic=
 declare -a labels
@@ -24,6 +26,7 @@ while [[ $# -gt 0 ]]; do
     -h|--help) usage; exit 0;;
     -i|--image) image=$2; shift; shift;;
     -d|--dir) dir=$2; shift; shift;;
+    -f|--file) file=$2; shift; shift;;
     -t|--tag) tags=("${tags[@]}" $2); shift; shift;;
     -s|--semantic) semantic=$2; shift; shift;;
     -l|--labels) labels=("${labels[@]}" $2); shift; shift;;
@@ -74,7 +77,7 @@ if [ ${#labels} -ge 1 ]; then
 fi
 
 echo "Building and push image '$image' from directory '$dir'"
-docker build $labels_text -t $image:build $dir
+docker build $labels_text -t $image:build $dir -f $dir/$file
 
 # Push all tags
 for tag in "${tags[@]}"; do
