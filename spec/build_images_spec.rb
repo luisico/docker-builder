@@ -1,3 +1,4 @@
+require 'spec_helper'
 require 'rspec/bash'
 
 RSpec.describe "build_images.sh" do
