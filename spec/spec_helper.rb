@@ -1,4 +1,3 @@
-
 # Main directory for tests
 TEST_BASE = File.join("tmp", "tests")
 
