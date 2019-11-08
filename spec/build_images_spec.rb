@@ -109,6 +109,38 @@ RSpec.describe "build_images.sh" do
       end
     end
 
+    context "and a specific Dockerfile" do
+      before do
+        @file = 'another-dockerfile'
+        @filepath = Pathname.new File.join(@dirpath, @file)
+        @filepath.mkpath unless File.exist?(@filepath)
+        @stdout, @stderr, @status = subject.execute("build_images.sh -i image -d #{@dirpath} -f #{@file}")
+      end
+
+      it "exists without error" do
+        expect(@status.exitstatus).to eq 0
+      end
+
+      it "should build the docker image" do
+        expect(docker).to be_called_with_arguments("build", "-t", "image:build", "-f", "#{@dirpath.to_s}/#{@file}", @dirpath.to_s).times(1)
+      end
+    end
+
+    context "and a specific Dockerfile that's missing" do
+      before do
+        @file = 'another-dockerfile'
+        @stdout, @stderr, @status = subject.execute("build_images.sh -i image -d #{@dirpath} -f #{@file}")
+      end
+
+      it "exists with error" do
+        expect(@status.exitstatus).to eq 1
+      end
+
+      it "notifies about the missing file" do
+        expect(@stdout).to include "Dockerfile '#{@dirpath.to_s}/#{@file}' is missing"
+      end
+    end
+
     context "with 1 tag" do
       before do
         @tag = 'tag1'
