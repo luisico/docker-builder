@@ -2,14 +2,14 @@
 
 # Usage helper
 usage() {
-      echo "Usage:"
-      echo "  -h, --help                Display this help message"
-      echo "  -i, --image image         Docker image to build"
-      echo "  -d, --dir dir             Directory for build context"
-      echo "  -f, --file file           Name of the Dockerfile (Default is 'PATH/Dockerfile')"
-      echo "  -t, --tag tag             Tags for docker image (ie. latest; optional, repeat to add more tags)"
-      echo "  -s, --semantic version    Generate docker tags for version based on semantic convention (ie 1.2.3)"
-      echo "  -l, --label label         Labels to pass to docker build (ie label=value; optional, repeat to add more labels)"
+  echo "Usage:"
+  echo "  -h, --help                Display this help message"
+  echo "  -i, --image image         Docker image to build"
+  echo "  -d, --dir dir             Directory for build context"
+  echo "  -f, --file file           Name of the Dockerfile (Default is 'PATH/Dockerfile')"
+  echo "  -t, --tag tag             Tags for docker image (ie. latest; optional, repeat to add more tags)"
+  echo "  -s, --semantic version    Generate docker tags for version based on semantic convention (ie 1.2.3)"
+  echo "  -l, --label label         Labels to pass to docker build (ie label=value; optional, repeat to add more labels)"
 }
 
 # Default variables
