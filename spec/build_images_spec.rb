@@ -17,7 +17,7 @@ RSpec.describe "build_images.sh" do
     Pathname.new(@testpath).exist? && Pathname.new(@testpath).rmtree
   end
 
-  describe "Arguments" do
+  describe "Required arguments" do
     context "with all required arguments" do
       before do
         @stdout, @stderr, @status = subject.execute("build_images.sh -i image -d #{@dirpath}")
@@ -141,7 +141,7 @@ RSpec.describe "build_images.sh" do
       end
     end
 
-    context "with 1 tag" do
+    context "and 1 tag" do
       before do
         @tag = 'tag1'
         @stdout, @stderr, @status = subject.execute("build_images.sh -i image -d #{@dirpath} -t #{@tag}")
@@ -165,7 +165,7 @@ RSpec.describe "build_images.sh" do
       end
     end
 
-    context "with more than 1 tag" do
+    context "and more than 1 tag" do
       before do
         @tags = ['tag1', 'tag2', 'tag3']
         tags = @tags.map{|tag| " -t #{tag}"}.join
@@ -251,7 +251,7 @@ RSpec.describe "build_images.sh" do
       end
     end
 
-    context "with 1 label" do
+    context "and 1 label" do
       before do
         @label = 'label1=val1'
         @stdout, @stderr, @status = subject.execute("build_images.sh -i image -d #{@dirpath} -l #{@label}")
@@ -266,7 +266,7 @@ RSpec.describe "build_images.sh" do
       end
     end
 
-    context "with more than 1 label" do
+    context "and more than 1 label" do
       before do
         @labels = ['label1=val1', 'label2=val2', 'label3=val3']
         labels = @labels.map{|label| " -l #{label}"}.join
