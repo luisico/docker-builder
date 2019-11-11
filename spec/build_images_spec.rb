@@ -130,7 +130,7 @@ RSpec.describe "build_images.sh" do
 
     context "and a specific Dockerfile that's missing" do
       before do
-        @file = 'another-dockerfile'
+        @file = 'missing-dockerfile'
         @stdout, @stderr, @status = subject.execute("build_images.sh -i image -d #{@dirpath} -f #{@file}")
       end
 
