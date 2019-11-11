@@ -12,6 +12,8 @@ image: docker:stable-git
     - apk add bash
   script:
     - ./build_images.sh -i $CI_REGISTRY_IMAGE -d $CI_PROJECT_DIR -t $CI_COMMIT_SHORT_SHA $EXTRA_TAG
+  only:
+    - branches
 
 Build:
   extends: .build_template
