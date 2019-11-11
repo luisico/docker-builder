@@ -36,7 +36,7 @@ specs:
   image:
     name: $CI_REGISTRY_IMAGE/serverspec:$CI_COMMIT_SHORT_SHA
     entrypoint: [""]
-  tags: ['docker-build']
+  tags: ['docker']
   only:
     - branches
   script:
