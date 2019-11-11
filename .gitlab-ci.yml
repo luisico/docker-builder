@@ -1,6 +1,7 @@
 ---
 stages:
   - build
+  - test
 
 image: docker:stable-git
 
@@ -12,6 +13,8 @@ image: docker:stable-git
     - apk add bash
   script:
     - ./build_images.sh -i $CI_REGISTRY_IMAGE -d $CI_PROJECT_DIR -t $CI_COMMIT_SHORT_SHA $EXTRA_TAG
+  only:
+    - branches
 
 Build:
   extends: .build_template
@@ -22,3 +25,19 @@ Build Tagged:
     EXTRA_TAG: "-t $CI_COMMIT_TAG"
   only:
     - tags
+
+Build rspec:
+  extends: .build_template
+  script:
+    - ./build_images.sh -i $CI_REGISTRY_IMAGE/rspec -d $CI_PROJECT_DIR/spec -t $CI_COMMIT_SHORT_SHA
+
+specs:
+  stage: test
+  image:
+    name: $CI_REGISTRY_IMAGE/rspec:$CI_COMMIT_SHORT_SHA
+    entrypoint: [""]
+  tags: ['docker']
+  only:
+    - branches
+  script:
+    - rspec --tty

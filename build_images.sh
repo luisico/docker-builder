@@ -2,20 +2,22 @@
 
 # Usage helper
 usage() {
-      echo "Usage:"
-      echo "  -h, --help                Display this help message"
-      echo "  -i, --image image         Docker image to build"
-      echo "  -d, --dir dir             Directory for build context"
-      echo "  -f, --file file           Name of the Dockerfile (Default is 'PATH/Dockerfile')"
-      echo "  -t, --tag tag             Tags for docker image (ie. latest; optional, repeat to add more tags)"
-      echo "  -s, --semantic version    Generate docker tags for version based on semantic convention (ie 1.2.3)"
-      echo "  -l, --label label         Labels to pass to docker build (ie label=value; optional, repeat to add more labels)"
+  echo "Usage:"
+  echo "  -h, --help                Display this help message"
+  echo "  -i, --image image         Docker image to build"
+  echo "  -d, --dir dir             Directory for build context"
+  echo
+  echo "Optional:"
+  echo "  -f, --file Dockerfile     Name of the Dockerfile (defaults to 'Dockerfile')"
+  echo "  -t, --tag tag             Tags for docker image (ie. latest; repeat to add more tags)"
+  echo "  -s, --semantic version    Generate docker tags for version based on semantic convention (ie 1.2.3)"
+  echo "  -l, --label label         Labels to pass to docker build (ie label=value; optional, repeat to add more labels)"
 }
 
 # Default variables
 image=
 dir=
-file=Dockerfile
+file=
 declare -a tags
 semantic=
 declare -a labels
@@ -54,6 +56,16 @@ else
   fi
 fi
 
+# Check file argument
+filearg=
+if [ -n "$file" ]; then
+  filearg="-f $dir/$file"
+  if [ ! -e "$dir/$file" ]; then
+    echo "Dockerfile '$dir/$file' is missing"
+    exit 1
+  fi
+fi
+
 # Set default tag
 if [ ${#tags} -lt 1 ]; then
   tags=(latest)
@@ -77,7 +89,7 @@ if [ ${#labels} -ge 1 ]; then
 fi
 
 echo "Building and push image '$image' from directory '$dir'"
-docker build $labels_text -t $image:build $dir -f $dir/$file
+docker build $labels_text -t $image:build $filearg $dir
 
 # Push all tags
 for tag in "${tags[@]}"; do
