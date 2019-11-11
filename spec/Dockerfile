@@ -9,10 +9,8 @@ WORKDIR /build
 
 COPY Gemfile Gemfile.lock ./
 RUN set -ex; \
-    apk --no-cache --virtual .build-deps add build-base libxml2-dev libxslt-dev; \
     apk --no-cache add bash; \
-    bundle install; \
-    apk del .build-deps
+    bundle install
 
 COPY docker-entrypoint.sh /usr/local/bin/
 RUN set -ex; \
