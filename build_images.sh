@@ -12,6 +12,9 @@ usage() {
   echo "  -t, --tag tag             Tags for docker image (ie. latest; repeat to add more tags)"
   echo "  -s, --semantic version    Generate docker tags for version based on semantic convention (ie 1.2.3)"
   echo "  -l, --label label         Labels to pass to docker build (ie label=value; optional, repeat to add more labels)"
+  echo
+  echo "Arguments after '--' will be pass to the docker build step. This can be used to pass build args,"
+  echo "                            invalidate the cache, etc."
 }
 
 # Default variables
@@ -21,6 +24,7 @@ file=
 declare -a tags
 semantic=
 declare -a labels
+build_opts=
 
 # Parse arguments
 while [[ $# -gt 0 ]]; do
@@ -33,7 +37,7 @@ while [[ $# -gt 0 ]]; do
     -s|--semantic) semantic=$2; shift; shift;;
     -l|--labels) labels=("${labels[@]}" $2); shift; shift;;
 
-    --) shift; break;;
+    --) shift; build_opts="$@"; break;;
     *) echo "Invalid Option: $1"
        usage; exit 1;;
   esac
@@ -89,7 +93,7 @@ if [ ${#labels} -ge 1 ]; then
 fi
 
 echo "Building and push image '$image' from directory '$dir'"
-docker build $labels_text -t $image:build $filearg $dir
+docker build $labels_text -t $image:build $filearg $build_opts $dir
 
 # Push all tags
 for tag in "${tags[@]}"; do

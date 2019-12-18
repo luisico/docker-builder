@@ -143,6 +143,20 @@ RSpec.describe "build_images.sh" do
       end
     end
 
+    context "and extra arguments for the build step" do
+      before do
+        @stdout, @stderr, @status = subject.execute("build_images.sh -i image -d #{@dirpath} -- --build-arg var=val --no-cache")
+      end
+
+      it "exists without error" do
+        expect(@status.exitstatus).to eq 0
+      end
+
+      it "should build the docker image" do
+        expect(docker).to be_called_with_arguments("build", "-t", "image:build", "--build-arg", "var=val", "--no-cache", @dirpath.to_s).times(1)
+      end
+    end
+
     context "and 1 tag" do
       before do
         @tag = 'tag1'
